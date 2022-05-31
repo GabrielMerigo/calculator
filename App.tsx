@@ -14,9 +14,7 @@ const App = () => {
     setDiplayValue('');
   }
 
-  const setOperation = (operation: string) => {
-    setDiplayValue('');
-  }
+  const setOperation = (operation: string) => {}
 
   return (
     <View style={S.container}>
