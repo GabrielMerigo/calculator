@@ -7,8 +7,11 @@ import {
 } from 'react-native';
 
 type ButtonProps = {
-  onClick?: () => void,
+  onClick: (label: string) => void
   label: string
+  double?: boolean, 
+  triple?: boolean, 
+  operation?: boolean
 }
 
 const S = StyleSheet.create({
@@ -33,15 +36,16 @@ const S = StyleSheet.create({
   }
 })
 
-export default function Button({ onClick, label, double, triple }: ButtonProps) {
-  const styleButton = [S.button];
+export default function Button({ onClick, label, double, triple, operation }: ButtonProps) {
+  const styleButton = [S.button] as any;
 
-  if(double) styleButton.push()
-
+  if(double) styleButton.push(S.buttonDouble)
+  if(triple) styleButton.push(S.buttonTriple)
+  if(operation) styleButton.push(S.operationButton)
 
   return (
-    <TouchableHighlight onPress={onClick}>
-      <Text style={S.button}>{label}</Text>
+    <TouchableHighlight onPress={() => onClick(label)}>
+      <Text style={styleButton}>{label}</Text>
     </TouchableHighlight>
   )
 }
