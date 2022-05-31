@@ -1,30 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, View, StyleSheet } from 'react-native';
 import Button from './src/components/Button';
 import Display from './src/components/Display';
 
 const App = () => {
+  const [displayValue, setDiplayValue] = useState('0');
+
+  const addDigit = (num: string) => {
+    setDiplayValue(num);
+  }
+
+  const clearMemory = () => {
+    setDiplayValue('');
+  }
+
+  const setOperation = (operation: string) => {
+    setDiplayValue('');
+  }
+
   return (
     <View style={S.container}>
-      <Display value="0" />
+      <Display value={displayValue} />
       <View style={S.buttons}>
-        <Button label="AC" />
-        <Button label="/" />
-        <Button label="7" />
-        <Button label="8" />
-        <Button label="9" />
-        <Button label="*" />
-        <Button label="4" />
-        <Button label="5" />
-        <Button label="6" />
-        <Button label="-" />
-        <Button label="1" />
-        <Button label="2" />
-        <Button label="3" />
-        <Button label="+" />
-        <Button label="0" />
-        <Button label="." />
-        <Button label="=" />
+        <Button label="AC" triple onClick={clearMemory} />
+        <Button label="/" operation onClick={setOperation} />
+        <Button label="7" onClick={addDigit} />
+        <Button label="8" onClick={addDigit} />
+        <Button label="9" onClick={addDigit} />
+        <Button label="*" operation onClick={setOperation} />
+        <Button label="4" onClick={addDigit} />
+        <Button label="5" onClick={addDigit} />
+        <Button label="6" onClick={addDigit} />
+        <Button label="-" operation onClick={setOperation} />
+        <Button label="1" onClick={addDigit} />
+        <Button label="2" onClick={addDigit} />
+        <Button label="3" onClick={addDigit} />
+        <Button label="+" operation onClick={setOperation} />
+        <Button label="0" double onClick={addDigit} />
+        <Button label="." onClick={addDigit} />
+        <Button label="=" operation onClick={setOperation} />
       </View>
     </View>
   );
