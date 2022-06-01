@@ -3,22 +3,70 @@ import { SafeAreaView, View, StyleSheet } from 'react-native';
 import Button from './src/components/Button';
 import Display from './src/components/Display';
 
-const App = () => {
-  const [displayValue, setDiplayValue] = useState('0');
+const initialState = {
+  displayValue: '0',
+  clearDisplay: false, // Quando estiver true, quando o usuário clicar automaticamente o display precisa ser limpo
+  operation: '',
+  values: [0, 0],
+  current: 0 // valor que eu estou setando
+}
 
-  const addDigit = (num: string) => {
-    setDiplayValue(num);
+const App = () => {
+  const [state, setState] = useState<{
+    displayValue: string
+    clearDisplay: boolean
+    operation: string | boolean
+    values: number[]
+    current: number
+  }>(initialState);
+
+  const addDigit = (digit: string) => {
+    if(digit === '.' && state.displayValue?.includes('.')) return;
+    const clearDisplay = state.displayValue === '0' || state.clearDisplay;
+    const currentValue = clearDisplay ? '' : state.displayValue;
+    const displayValue = currentValue + digit;
+    setState({ ...state, displayValue, clearDisplay: false });
+
+    if(digit !== '.'){
+      const newValue = parseFloat(displayValue)
+      const values = [...state.values]
+      values[state.current] = newValue;
+    }
   }
 
   const clearMemory = () => {
-    setDiplayValue('');
+    setState(initialState)
   }
 
-  const setOperation = (operation: string) => {}
+  const setOperation = (operation: string) => {
+    if(state.current === 0){
+      setState({...state, operation, current: 1, clearDisplay: true });
+    }else{
+      const equals = operation === '=';
+      const values = state.values;
+
+      try{
+        values[0] = eval(`${values[0]} ${operation} ${values[1]}`)
+      }catch(e){
+        values[0] = state.values[0]
+      }
+      
+      values[1] = 0;
+      setState({
+        ...state,
+        displayValue: String(values[0]),
+        operation: equals ? false : operation,
+        current: equals ? 0 : 1,
+        clearDisplay: !equals,
+        values
+      })
+
+    }
+  }
 
   return (
     <View style={S.container}>
-      <Display value={displayValue} />
+      <Display value={state.displayValue} />
       <View style={S.buttons}>
         <Button label="AC" triple onClick={clearMemory} />
         <Button label="/" operation onClick={setOperation} />
