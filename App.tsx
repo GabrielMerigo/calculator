@@ -21,8 +21,10 @@ const App = () => {
   }>(initialState);
 
   const addDigit = (digit: string) => {
-    if(digit === '.' && state.displayValue?.includes('.')) return;
     const clearDisplay = state.displayValue === '0' || state.clearDisplay;
+
+    if(digit === '.' && !clearDisplay && state.displayValue?.includes('.')) return;
+    
     const currentValue = clearDisplay ? '' : state.displayValue;
     const displayValue = currentValue + digit;
     setState({ ...state, displayValue, clearDisplay: false });
@@ -32,6 +34,7 @@ const App = () => {
       const values = state.values
       values[state.current] = newValue;
     }
+    console.debug(state)
   }
 
   const clearMemory = () => {
@@ -62,6 +65,7 @@ const App = () => {
       });
 
     }
+    console.debug(state)
   }
 
   return (
