@@ -29,7 +29,7 @@ const App = () => {
 
     if(digit !== '.'){
       const newValue = parseFloat(displayValue)
-      const values = [...state.values]
+      const values = state.values
       values[state.current] = newValue;
     }
   }
@@ -46,7 +46,7 @@ const App = () => {
       const values = state.values;
 
       try{
-        values[0] = eval(`${values[0]} ${operation} ${values[1]}`)
+        values[0] = eval(`${values[0]} ${state.operation} ${values[1]}`)
       }catch(e){
         values[0] = state.values[0]
       }
@@ -59,7 +59,7 @@ const App = () => {
         current: equals ? 0 : 1,
         clearDisplay: !equals,
         values
-      })
+      });
 
     }
   }
